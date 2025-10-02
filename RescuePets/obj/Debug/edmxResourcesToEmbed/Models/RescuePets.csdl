@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RescueDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Adoption">
+    <Key>
+      <PropertyRef Name="AdoptionID" />
+    </Key>
+    <Property Name="AdoptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PetID" Type="Int32" Nullable="false" />
+    <Property Name="AdopterUserID" Type="Int32" Nullable="false" />
+    <Property Name="AdoptionDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Adoptions__Adopt__4CA06362" FromRole="Adoptions" ToRole="Users" />
+    <NavigationProperty Name="Pet" Relationship="Self.FK__Adoptions__PetID__4BAC3F29" FromRole="Adoptions" ToRole="Pets" />
+  </EntityType>
+  <EntityType Name="Donation">
+    <Key>
+      <PropertyRef Name="DonationID" />
+    </Key>
+    <Property Name="DonationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DonorUserID" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="DonationDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Donations__Donor__5070F446" FromRole="Donations" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Gender">
+    <Key>
+      <PropertyRef Name="GenderID" />
+    </Key>
+    <Property Name="GenderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GenderName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Pets" Relationship="Self.FK__Pets__GenderID__46E78A0C" FromRole="Genders" ToRole="Pets" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="LocationID" />
+    </Key>
+    <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LocationName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Pets" Relationship="Self.FK__Pets__LocationID__45F365D3" FromRole="Locations" ToRole="Pets" />
+  </EntityType>
+  <EntityType Name="PetBreed">
+    <Key>
+      <PropertyRef Name="BreedID" />
+    </Key>
+    <Property Name="BreedID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BreedName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PetType" Relationship="Self.FK__PetBreeds__TypeI__3B75D760" FromRole="PetBreeds" ToRole="PetTypes" />
+    <NavigationProperty Name="Pets" Relationship="Self.FK__Pets__BreedID__44FF419A" FromRole="PetBreeds" ToRole="Pets" />
+  </EntityType>
+  <EntityType Name="Pet">
+    <Key>
+      <PropertyRef Name="PetID" />
+    </Key>
+    <Property Name="PetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PetName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="BreedID" Type="Int32" Nullable="false" />
+    <Property Name="LocationID" Type="Int32" Nullable="false" />
+    <Property Name="Age" Type="Int32" Nullable="false" />
+    <Property Name="Weight" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+    <Property Name="GenderID" Type="Int32" Nullable="false" />
+    <Property Name="PetStory" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ImageData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PostedByUserID" Type="Int32" Nullable="false" />
+    <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Adoptions" Relationship="Self.FK__Adoptions__PetID__4BAC3F29" FromRole="Pets" ToRole="Adoptions" />
+    <NavigationProperty Name="Gender" Relationship="Self.FK__Pets__GenderID__46E78A0C" FromRole="Pets" ToRole="Genders" />
+    <NavigationProperty Name="Location" Relationship="Self.FK__Pets__LocationID__45F365D3" FromRole="Pets" ToRole="Locations" />
+    <NavigationProperty Name="PetBreed" Relationship="Self.FK__Pets__BreedID__44FF419A" FromRole="Pets" ToRole="PetBreeds" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Pets__PostedByUs__47DBAE45" FromRole="Pets" ToRole="Users" />
+    <NavigationProperty Name="PetType" Relationship="Self.FK__Pets__TypeID__440B1D61" FromRole="Pets" ToRole="PetTypes" />
+  </EntityType>
+  <EntityType Name="PetType">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="PetBreeds" Relationship="Self.FK__PetBreeds__TypeI__3B75D760" FromRole="PetTypes" ToRole="PetBreeds" />
+    <NavigationProperty Name="Pets" Relationship="Self.FK__Pets__TypeID__440B1D61" FromRole="PetTypes" ToRole="Pets" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Adoptions" Relationship="Self.FK__Adoptions__Adopt__4CA06362" FromRole="Users" ToRole="Adoptions" />
+    <NavigationProperty Name="Donations" Relationship="Self.FK__Donations__Donor__5070F446" FromRole="Users" ToRole="Donations" />
+    <NavigationProperty Name="Pets" Relationship="Self.FK__Pets__PostedByUs__47DBAE45" FromRole="Users" ToRole="Pets" />
+  </EntityType>
+  <Association Name="FK__Adoptions__Adopt__4CA06362">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Adoptions" Type="Self.Adoption" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Adoptions">
+        <PropertyRef Name="AdopterUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Adoptions__PetID__4BAC3F29">
+    <End Role="Pets" Type="Self.Pet" Multiplicity="1" />
+    <End Role="Adoptions" Type="Self.Adoption" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pets">
+        <PropertyRef Name="PetID" />
+      </Principal>
+      <Dependent Role="Adoptions">
+        <PropertyRef Name="PetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Donations__Donor__5070F446">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Donations" Type="Self.Donation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Donations">
+        <PropertyRef Name="DonorUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pets__GenderID__46E78A0C">
+    <End Role="Genders" Type="Self.Gender" Multiplicity="1" />
+    <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genders">
+        <PropertyRef Name="GenderID" />
+      </Principal>
+      <Dependent Role="Pets">
+        <PropertyRef Name="GenderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pets__LocationID__45F365D3">
+    <End Role="Locations" Type="Self.Location" Multiplicity="1" />
+    <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Locations">
+        <PropertyRef Name="LocationID" />
+      </Principal>
+      <Dependent Role="Pets">
+        <PropertyRef Name="LocationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PetBreeds__TypeI__3B75D760">
+    <End Role="PetTypes" Type="Self.PetType" Multiplicity="1" />
+    <End Role="PetBreeds" Type="Self.PetBreed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PetTypes">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="PetBreeds">
+        <PropertyRef Name="TypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pets__BreedID__44FF419A">
+    <End Role="PetBreeds" Type="Self.PetBreed" Multiplicity="1" />
+    <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PetBreeds">
+        <PropertyRef Name="BreedID" />
+      </Principal>
+      <Dependent Role="Pets">
+        <PropertyRef Name="BreedID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pets__PostedByUs__47DBAE45">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Pets">
+        <PropertyRef Name="PostedByUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Pets__TypeID__440B1D61">
+    <End Role="PetTypes" Type="Self.PetType" Multiplicity="1" />
+    <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PetTypes">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Pets">
+        <PropertyRef Name="TypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RescueDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Adoptions" EntityType="Self.Adoption" />
+    <EntitySet Name="Donations" EntityType="Self.Donation" />
+    <EntitySet Name="Genders" EntityType="Self.Gender" />
+    <EntitySet Name="Locations" EntityType="Self.Location" />
+    <EntitySet Name="PetBreeds" EntityType="Self.PetBreed" />
+    <EntitySet Name="Pets" EntityType="Self.Pet" />
+    <EntitySet Name="PetTypes" EntityType="Self.PetType" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK__Adoptions__Adopt__4CA06362" Association="Self.FK__Adoptions__Adopt__4CA06362">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Adoptions" EntitySet="Adoptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Adoptions__PetID__4BAC3F29" Association="Self.FK__Adoptions__PetID__4BAC3F29">
+      <End Role="Pets" EntitySet="Pets" />
+      <End Role="Adoptions" EntitySet="Adoptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Donations__Donor__5070F446" Association="Self.FK__Donations__Donor__5070F446">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Donations" EntitySet="Donations" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pets__GenderID__46E78A0C" Association="Self.FK__Pets__GenderID__46E78A0C">
+      <End Role="Genders" EntitySet="Genders" />
+      <End Role="Pets" EntitySet="Pets" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pets__LocationID__45F365D3" Association="Self.FK__Pets__LocationID__45F365D3">
+      <End Role="Locations" EntitySet="Locations" />
+      <End Role="Pets" EntitySet="Pets" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PetBreeds__TypeI__3B75D760" Association="Self.FK__PetBreeds__TypeI__3B75D760">
+      <End Role="PetTypes" EntitySet="PetTypes" />
+      <End Role="PetBreeds" EntitySet="PetBreeds" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pets__BreedID__44FF419A" Association="Self.FK__Pets__BreedID__44FF419A">
+      <End Role="PetBreeds" EntitySet="PetBreeds" />
+      <End Role="Pets" EntitySet="Pets" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pets__PostedByUs__47DBAE45" Association="Self.FK__Pets__PostedByUs__47DBAE45">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Pets" EntitySet="Pets" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Pets__TypeID__440B1D61" Association="Self.FK__Pets__TypeID__440B1D61">
+      <End Role="PetTypes" EntitySet="PetTypes" />
+      <End Role="Pets" EntitySet="Pets" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

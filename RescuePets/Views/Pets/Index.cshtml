@@ -1,0 +1,151 @@
+﻿@model RescuePets.Controllers.PetsController.PetsViewModel
+@{
+    ViewBag.Title = "Available Pets";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center mb-4"><i class="fas fa-paw"></i> Find Your Perfect Pet</h2>
+
+                @using (Html.BeginForm("Index", "Pets", FormMethod.Get, new { @class = "form-inline justify-content-center" }))
+                {
+                    <div class="form-group mr-3 mb-2">
+                        <label class="mr-2">Type:</label>
+                        @Html.DropDownList("typeId", new SelectList(ViewBag.PetTypes ?? Model.PetTypes, "Value", "Text", Model.SelectedTypeId), "All Types", new { @class = "form-control", @id = "typeDropdown" })
+                    </div>
+
+                    <div class="form-group mr-3 mb-2">
+                        <label class="mr-2">Breed:</label>
+                        @Html.DropDownList("breedId", new SelectList(ViewBag.PetBreeds ?? Model.PetBreeds, "Value", "Text", Model.SelectedBreedId), "All Breeds", new { @class = "form-control", @id = "breedDropdown" })
+                    </div>
+
+                    <div class="form-group mr-3 mb-2">
+                        <label class="mr-2">Location:</label>
+                        @Html.DropDownList("locationId", new SelectList(ViewBag.Locations ?? Model.Locations, "Value", "Text", Model.SelectedLocationId), "All Locations", new { @class = "form-control" })
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2 mb-2">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+
+                    <a href="@Url.Action("Index", "Pets")" class="btn btn-secondary mb-2">
+                        <i class="fas fa-times"></i> Clear
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model.Pets.Any())
+    {
+        foreach (var pet in Model.Pets)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(pet.ImageData))
+                    {
+                        <img src="data:image/jpeg;base64,@pet.ImageData" alt="@pet.PetName" class="pet-image card-img-top">
+                    }
+                    else
+                    {
+                        <div class="pet-image card-img-top d-flex align-items-center justify-content-center bg-light">
+                            <i class="fas fa-camera fa-3x text-muted"></i>
+                        </div>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">@pet.PetName</h5>
+                            <span class="@(pet.Status == "Available" ? "status-available" : "status-adopted")">
+                                @pet.Status
+                            </span>
+                        </div>
+
+                        <div class="mb-2">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> @pet.Location.LocationName
+                                | <i class="fas fa-birthday-cake"></i> @pet.Age years
+                                | <i class="fas fa-weight"></i> @pet.Weight kg
+                                | <i class="fas fa-venus-mars"></i> @pet.Gender.GenderName
+                            </small>
+                        </div>
+
+                        <div class="mb-2">
+                            <span class="badge badge-info">@pet.PetType.TypeName</span>
+                            <span class="badge badge-secondary">@pet.PetBreed.BreedName</span>
+                        </div>
+
+                        <p class="card-text flex-grow-1">
+                            @(pet.PetStory.Length > 100 ? pet.PetStory.Substring(0, 100) + "..." : pet.PetStory)
+                        </p>
+
+                        <div class="mt-auto">
+                            <small class="text-muted d-block mb-2">
+                                <i class="fas fa-user"></i> Posted by @pet.User.FirstName @pet.User.LastName
+                            </small>
+
+                            @if (pet.Status == "Available")
+                            {
+                                <a href="@Url.Action("Adopt", "Pets", new { id = pet.PetID })" class="btn btn-primary btn-block">
+                                    <i class="fas fa-heart"></i> VIEW
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary btn-block" disabled>
+                                    <i class="fas fa-check"></i> Adopted
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                    <h4>No pets found</h4>
+                    <p class="text-muted">Try adjusting your search filters or check back later for new additions.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Update breeds when type changes
+            $('#typeDropdown').change(function() {
+                var typeId = $(this).val();
+
+                if (typeId && typeId !== '') {
+                    $.ajax({
+                        url: '@Url.Action("GetBreedsByType", "Pets")',
+                        type: 'GET',
+                        data: { typeId: typeId },
+                        success: function(data) {
+                            var breedDropdown = $('#breedDropdown');
+                            breedDropdown.empty();
+                            breedDropdown.append('<option value="">All Breeds</option>');
+
+                            $.each(data, function(index, breed) {
+                                breedDropdown.append('<option value="' + breed.BreedID + '">' + breed.BreedName + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#breedDropdown').html('<option value="">All Breeds</option>');
+                }
+            });
+        });
+    </script>
+}

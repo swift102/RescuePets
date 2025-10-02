@@ -1,0 +1,227 @@
+﻿@model RescuePets.Controllers.DonationViewModel
+@{
+    ViewBag.Title = "Support Our Cause";
+}
+
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="mb-0"><i class="fas fa-heart"></i> Help Us Save More Lives</h2>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <p class="lead">Every donation helps us rescue, care for, and find homes for pets in need.</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">Fundraising Goal</h5>
+                        <span class="badge badge-primary">
+                            R@(Model.TotalDonations.ToString("N2")) / R@(Model.DonationGoal.ToString("N2"))
+                        </span>
+                    </div>
+
+                    <div class="progress progress-lg" style="height: 25px;">
+                        <div class="progress-bar @(Model.GoalReached ? "bg-success" : "bg-primary") progress-bar-striped @(Model.GoalReached ? "" : "progress-bar-animated")"
+                             role="progressbar"
+                             style="width: @(Model.ProgressPercentage)%"
+                             aria-valuenow="@(Model.ProgressPercentage)"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            @(Model.ProgressPercentage.ToString("F1"))%
+                        </div>
+                    </div>
+
+                    @if (Model.GoalReached)
+                    {
+                        <div class="alert alert-success mt-3">
+                            <i class="fas fa-trophy"></i> <strong>Goal Reached!</strong> Thank you for your amazing support!
+                            We can still use your help to save even more pets.
+                        </div>
+                    }
+                </div>
+
+                <!-- Donation Form -->
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h4 class="text-center mb-3"><i class="fas fa-donate"></i> Make a Donation</h4>
+
+                        @using (Html.BeginForm("Donate", "Donations", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <label for="donorId">Your Name <span class="text-danger">*</span></label>
+                                @Html.DropDownList("donorId", Model.Users, "Select your name...", new { @class = "form-control", @id = "userDropdown", required = "required" })
+                                <div class="invalid-feedback">
+                                    Please select your name.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number</label>
+                                <input type="text" class="form-control" id="phoneNumber" readonly placeholder="Select your name first">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount">Donation Amount (R) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">R</span>
+                                    </div>
+                                    <input type="number" class="form-control" name="amount" id="amount"
+                                           step="0.01" min="1" max="50000" required
+                                           placeholder="Enter amount">
+                                    <div class="invalid-feedback">
+                                        Please enter a valid donation amount.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Amount Buttons -->
+                            <div class="form-group">
+                                <label>Quick Select:</label>
+                                <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                                    <label class="btn btn-outline-primary flex-fill">
+                                        <input type="radio" name="quickAmount" value="50"> R50
+                                    </label>
+                                    <label class="btn btn-outline-primary flex-fill">
+                                        <input type="radio" name="quickAmount" value="100"> R100
+                                    </label>
+                                    <label class="btn btn-outline-primary flex-fill">
+                                        <input type="radio" name="quickAmount" value="250"> R250
+                                    </label>
+                                    <label class="btn btn-outline-primary flex-fill">
+                                        <input type="radio" name="quickAmount" value="500"> R500
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg btn-block" id="donateBtn" disabled>
+                                <i class="fas fa-heart"></i> Donate Now
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-info-circle"></i> How Your Donation Helps</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-medkit text-danger fa-lg mr-2"></i>
+                        <strong>R50</strong>
+                    </div>
+                    <small class="text-muted">Provides basic veterinary care for one pet</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-utensils text-warning fa-lg mr-2"></i>
+                        <strong>R100</strong>
+                    </div>
+                    <small class="text-muted">Feeds a pet for one month</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-home text-success fa-lg mr-2"></i>
+                        <strong>R250</strong>
+                    </div>
+                    <small class="text-muted">Provides shelter and care for a week</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-heart text-primary fa-lg mr-2"></i>
+                        <strong>R500</strong>
+                    </div>
+                    <small class="text-muted">Complete adoption preparation for one pet</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-shield-alt"></i> Secure Donation</h4>
+            </div>
+            <div class="card-body text-center">
+                <i class="fas fa-lock fa-3x text-success mb-3"></i>
+                <p class="text-muted">Your donation is secure and goes directly to helping pets in need.</p>
+                <div class="d-flex justify-content-center">
+                    <i class="fas fa-heart text-danger fa-lg mr-2"></i>
+                    <small>100% goes to pet rescue operations</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Update phone number when user changes
+            $('#userDropdown').change(function() {
+                var userId = $(this).val();
+
+                if (userId && userId !== '') {
+                    $.ajax({
+                        url: '@Url.Action("GetPhoneByUser", "Donations")',
+                        type: 'GET',
+                        data: { userId: userId },
+                        success: function(data) {
+                            $('#phoneNumber').val(data.phoneNumber);
+                            updateDonateButton();
+                        }
+                    });
+                } else {
+                    $('#phoneNumber').val('');
+                    updateDonateButton();
+                }
+            });
+
+            // Quick amount buttons
+            $('input[name="quickAmount"]').change(function() {
+                $('#amount').val($(this).val());
+                updateDonateButton();
+            });
+
+            // Amount input change
+            $('#amount').on('input', function() {
+                updateDonateButton();
+                // Uncheck quick amount buttons if custom amount is entered
+                $('input[name="quickAmount"]').prop('checked', false);
+                $('.btn-group-toggle .btn').removeClass('active');
+            });
+
+            function updateDonateButton() {
+                var userId = $('#userDropdown').val();
+                var amount = parseFloat($('#amount').val()) || 0;
+
+                $('#donateBtn').prop('disabled', !userId || amount <= 0);
+            }
+
+            // Form validation
+            $('.needs-validation').on('submit', function(event) {
+                if (this.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                $(this).addClass('was-validated');
+            });
+
+            // Progress bar animation on load
+            setTimeout(function() {
+                $('.progress-bar').addClass('progress-bar-animated');
+            }, 500);
+        });
+    </script>
+}

@@ -1,0 +1,142 @@
+﻿@model RescuePets.Controllers.HomeViewModel
+@{
+    ViewBag.Title = "Home - RescuePet";
+}
+
+<div class="row">
+    <div class="col-12">
+        <!-- Hero Section -->
+        <div class="card mb-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border: 2px solid rgba(102, 126, 234, 0.3);">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-heart fa-4x mb-3" style="color: #667eea;"></i>
+                <h1 class="display-4 mb-3">Welcome to RescuePet</h1>
+                <p class="lead mb-4">
+                    Find your perfect companion and give a pet a second chance at happiness.
+                    Every adoption changes two lives - theirs and yours.
+                </p>
+                <a href="@Url.Action("Index", "Pets")" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paw"></i> VIEW PETS
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Statistics Card -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body d-flex flex-column justify-content-center">
+                <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                <h2 class="display-3 mb-2" style="color: #667eea;">@Model.TotalAdoptions</h2>
+                <h5 class="text-muted">Successful Adoptions</h5>
+                <p class="mt-3">
+                    Thanks to wonderful people like you, @Model.TotalAdoptions @(Model.TotalAdoptions == 1 ? "pet has" : "pets have") found loving homes!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Adoptions Card -->
+    <div class="col-lg-8 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-star text-warning"></i> Recent Adoptions
+                </h4>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentAdoptions != null && Model.RecentAdoptions.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var adoption in Model.RecentAdoptions)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <div>
+                                    <i class="fas fa-user-circle text-primary mr-2"></i>
+                                    <strong>@adoption.AdopterName</strong> adopted <strong class="text-success">@adoption.PetName</strong>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar-alt mr-1"></i>
+                                    @adoption.AdoptionDate.ToString("MMM dd, yyyy")
+                                </small>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-heart-broken fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No adoptions yet. Be the first to give a pet a loving home!</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-search fa-3x mb-3" style="color: #667eea;"></i>
+                <h5 class="card-title">Find Your Pet</h5>
+                <p class="card-text">
+                    Browse through our available pets and find your perfect match. Filter by type, breed, and location.
+                </p>
+                <a href="@Url.Action("Index", "Pets")" class="btn btn-outline-primary">
+                    <i class="fas fa-paw"></i> Browse Pets
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-plus-circle fa-3x mb-3" style="color: #28a745;"></i>
+                <h5 class="card-title">Post a Pet</h5>
+                <p class="card-text">
+                    Help a pet find their forever home by listing them for adoption on our platform.
+                </p>
+                <a href="@Url.Action("PostaPet", "Pets")" class="btn btn-outline-success">
+                    <i class="fas fa-upload"></i> Post a Pet
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-donate fa-3x mb-3" style="color: #ffc107;"></i>
+                <h5 class="card-title">Support Our Cause</h5>
+                <p class="card-text">
+                    Make a difference by donating to help us rescue and care for more pets in need.
+                </p>
+                <a href="@Url.Action("Index", "Donations")" class="btn btn-outline-warning">
+                    <i class="fas fa-heart"></i> Donate Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row">
+    <div class="col-12">
+        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-center text-white py-5">
+                <h3 class="mb-3">Ready to Change a Life?</h3>
+                <p class="lead mb-4">
+                    Every pet deserves a loving home. Start your adoption journey today!
+                </p>
+                <a href="@Url.Action("Index", "Pets")" class="btn btn-light btn-lg">
+                    <i class="fas fa-heart"></i> Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

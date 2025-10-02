@@ -1,0 +1,197 @@
+﻿@model RescuePets.Controllers.PetsController.PostPetViewModel
+@{
+    ViewBag.Title = "Post a Pet for Adoption";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="mb-0"><i class="fas fa-plus-circle"></i> Post a Pet for Adoption</h2>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("PostaPet", "Pets", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <h5 class="text-primary mb-3"><i class="fas fa-user"></i> Your Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Your Name <span class="text-danger">*</span></label>
+                                @Html.DropDownListFor(m => m.PostedByUserID, Model.Users, "Select your name...", new { @class = "form-control", @id = "userDropdown", required = "required" })
+                                @Html.ValidationMessageFor(m => m.PostedByUserID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" class="form-control" id="phoneNumber" readonly placeholder="Select your name first">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="text-primary mb-3"><i class="fas fa-paw"></i> Pet Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Pet Name <span class="text-danger">*</span></label>
+                                @Html.TextBoxFor(m => m.PetName, new { @class = "form-control", placeholder = "Enter pet name", required = "required" })
+                                @Html.ValidationMessageFor(m => m.PetName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Location <span class="text-danger">*</span></label>
+                                @Html.DropDownListFor(m => m.LocationID, Model.Locations, "Select location...", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(m => m.LocationID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Pet Type <span class="text-danger">*</span></label>
+                                @Html.DropDownListFor(m => m.TypeID, Model.PetTypes, "Select type...", new { @class = "form-control", @id = "typeDropdown", required = "required" })
+                                @Html.ValidationMessageFor(m => m.TypeID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Breed <span class="text-danger">*</span></label>
+                                @Html.DropDownListFor(m => m.BreedID, new SelectList(Enumerable.Empty<SelectListItem>
+                                         ()), "Select type first...", new { @class = "form-control", @id = "breedDropdown", required = "required" })
+                                @Html.ValidationMessageFor(m => m.BreedID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Age (years) <span class="text-danger">*</span></label>
+                                @Html.TextBoxFor(m => m.Age, new { @class = "form-control", @type = "number", min = "0", max = "25", required = "required" })
+                                @Html.ValidationMessageFor(m => m.Age, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Weight (kg) <span class="text-danger">*</span></label>
+                                @Html.TextBoxFor(m => m.Weight, "{0:0.0}", new
+                                {
+                                    @class = "form-control",
+                                    @type = "text",
+                                    placeholder = "e.g., 2.5",
+                                    pattern = "[0-9]+(\\.[0-9]+)?",
+                                    title = "Please enter a valid number (e.g., 2.5)",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted">Enter weight in kilograms (e.g., 2.5)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Gender <span class="text-danger">*</span></label>
+                                @Html.DropDownListFor(m => m.GenderID, Model.Genders, "Select gender...", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(m => m.GenderID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pet Story <span class="text-danger">*</span></label>
+                        @Html.TextAreaFor(m => m.PetStory, new { @class = "form-control", rows = "4", placeholder = "Tell us about this pet's personality, needs, and what makes them special...", required = "required" })
+                        @Html.ValidationMessageFor(m => m.PetStory, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pet Photo</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="imageFile" name="imageFile" accept="image/*">
+                            <label class="custom-file-label" for="imageFile">Choose photo...</label>
+                        </div>
+                        <small class="form-text text-muted">Please upload a clear photo of the pet. Accepted formats: JPG, PNG, GIF</small>
+                    </div>
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg mr-3">
+                            <i class="fas fa-paper-plane"></i> Post Pet
+                        </button>
+                        <a href="@Url.Action(" Index", "Pets" )" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+    $(document).ready(function () {
+        // Update phone number when user changes
+        $('#userDropdown').change(function () {
+            var userId = $(this).val();
+
+            if (userId && userId !== '') {
+                $.ajax({
+                    url: '@Url.Action("GetPhoneByUser", "Pets")',
+                    type: 'GET',
+                    data: { userId: userId },
+                    success: function (data) {
+                        $('#phoneNumber').val(data.phoneNumber);
+                    }
+                });
+            } else {
+                $('#phoneNumber').val('');
+            }
+        });
+
+        // Update breeds when type changes
+        $('#typeDropdown').change(function () {
+            var typeId = $(this).val();
+
+            if (typeId && typeId !== '') {
+                $.ajax({
+                    url: '@Url.Action("GetBreedsByType", "Pets")',
+                    type: 'GET',
+                    data: { typeId: typeId },
+                    success: function (data) {
+                        var breedDropdown = $('#breedDropdown');
+                        breedDropdown.empty();
+                        breedDropdown.append('<option value="">Select breed...</option>');
+
+                        $.each(data, function (index, breed) {
+                            breedDropdown.append('<option value="' + breed.BreedID + '">' + breed.BreedName + '</option>');
+                        });
+
+                        breedDropdown.prop('disabled', false);
+                    }
+                });
+            } else {
+                $('#breedDropdown').html('<option value="">Select type first...</option>').prop('disabled', true);
+            }
+        });
+
+        // Update file input label
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).siblings('.custom-file-label').html(fileName || 'Choose photo...');
+        });
+
+        // Form validation
+        $('.needs-validation').on('submit', function (event) {
+            if (this.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            $(this).addClass('was-validated');
+        });
+    });
+    </script>
+}
