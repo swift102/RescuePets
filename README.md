@@ -112,17 +112,3 @@ RescuePets/
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
----
-
-## 📧 Contact
-
-For questions or suggestions:
-**Project Maintainer** – [Your Name] ([you@example.com](mailto:you@example.com))
-GitHub: [swift102](https://github.com/swift102)
-
-```
-
----
-
-Do you want me to make this **assignment-style** (more academic/professional) or **portfolio-style** (to showcase your coding work to employers)?
-```
